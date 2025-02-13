@@ -81,7 +81,14 @@ git clone https://github.com/yourusername/nurseryplantshop.git
 cd nurseryplantshop
 ```
 
-2. Rename `application.properties.example` to `application.properties` and update:
+2. Import Database:
+   - Start XAMPP and enable MySQL and Apache
+   - Open phpMyAdmin (http://localhost/phpmyadmin)
+   - Create a new database named 'nurserydb'
+   - Import the provided `nurserydb.sql` file into your database
+   - This will set up all necessary tables, user roles, and create an admin account
+
+3. Rename `application.properties.example` to `application.properties` and update:
 
 Configure MySQL Database:
 ```properties
@@ -97,7 +104,7 @@ spring.mail.password= # your app password (requires 2FA)
 ```
 - How to get an app password: (https://itsupport.umd.edu/itsupport?id=kb_article_view&sysparm_article=KB0015112)
 
-3. Get a Stripe API Key:
+4. Get a Stripe API Key:
    - Visit Stripe's official website and sign up for an account
    - Go to the Developers section and click on API Keys
    - Copy the Secret Key and add it to your `application.properties` file:
@@ -106,16 +113,23 @@ spring.mail.password= # your app password (requires 2FA)
 stripe.secretKey=your_stripe_secret_key
 ```
 
-4. Start XAMPP and enable MySQL and Apache
+5. Start XAMPP and enable MySQL and Apache
 
-5. Build and run the project:
+6. Build and run the project:
 ```bash
 mvn spring-boot:run
 ```
 
-6. Access the application:
+7. Access the application:
    - User Panel: http://localhost:8080
    - Admin Panel: http://localhost:8080/admin
+   
+### Admin Access
+To access the admin panel, use these default credentials:
+- Email: Admin@12345.com
+- Password: Admin@12345
+
+> Note: It's highly recommended to change these credentials after your first login or create a new admin account for security purposes.
 
 ## 💳 Simulating Stripe Payments (Test Mode)
 
