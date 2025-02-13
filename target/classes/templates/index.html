@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+<title>Home</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/font-awesome.min.css" rel="stylesheet">
+<link href="css/prettyPhoto.css" rel="stylesheet">
+<link href="css/price-range.css" rel="stylesheet">
+<link href="css/animate.css" rel="stylesheet">
+<link href="css/main.css" rel="stylesheet">
+<link href="css/responsive.css" rel="stylesheet">
+</head>
+
+<body>
+	<div th:replace="~{nav/navbar :: navbar}"></div>
+	
+		<section id="slider">
+			<!--slider-->
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-12">
+						<div id="slider-carousel" class="carousel slide" data-ride="carousel">
+							<ol class="carousel-indicators">
+								<li data-target="#slider-carousel" data-slide-to="0" class="active"></li>
+								<li data-target="#slider-carousel" data-slide-to="1"></li>
+								<li data-target="#slider-carousel" data-slide-to="2"></li>
+							</ol>
+	
+							<div class="carousel-inner">
+	    <div class="item active">
+	        <div class="col-sm-6">
+	            <h1>
+	                <span>Nursery </span>Plant Shop
+	            </h1>
+	            <h2>Bringing Nature to Your Home</h2>
+	            <p>Discover a variety of high-quality plants that bring life and beauty to your space. From vibrant flowers to lush greenery, we have something for everyone.</p>
+	            <a href="/shop" class="btn btn-primary">Shop Now</a>
+	        </div>
+	        <div class="col-sm-6">
+	            <img src="images/home/rose.jpg" class="girl img-responsive" alt="" /> 
+	        </div>
+	    </div>
+	    <div class="item">
+	        <div class="col-sm-6">
+	            <h1>
+	                <span>Nursery </span>Plant Shop
+	            </h1>
+	            <h2>Plants for Every Space</h2>
+	            <p>Whether you’re looking for indoor plants, outdoor garden favorites, or unique species, we have the perfect plant to match your style and needs.</p>
+	            <a href="/shop" class="btn btn-primary">Shop Now</a>
+	        </div>
+	        <div class="col-sm-6">
+	            <img src="images/home/indoorplant.jpg" class="girl img-responsive" alt="" />
+	        </div>
+	    </div>
+	
+	    <div class="item">
+	        <div class="col-sm-6">
+	            <h1>
+	                <span>Nursery </span>Plant Shop
+	            </h1>
+	            <h2>Quality Plants, Expert Care</h2>
+	            <p>We provide not only top-quality plants but also expert advice and care tips to help you nurture your greenery and create a beautiful, thriving environment.</p>
+	            <a href="/shop" class="btn btn-primary">Shop Now</a>
+	        </div>
+	        <div class="col-sm-6">
+	            <img src="images/home/cactus.jpg" class="girl img-responsive" alt="" />
+	        </div>
+	    </div>
+	</div>
+
+
+						<a href="#slider-carousel" class="left control-carousel hidden-xs"
+							data-slide="prev"> <i class="fa fa-angle-left"></i>
+						</a> <a href="#slider-carousel"
+							class="right control-carousel hidden-xs" data-slide="next"> <i
+							class="fa fa-angle-right"></i>
+						</a>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--/slider-->
+
+	<section>
+		<div class="container">
+			<div class="row">
+			<div th:replace="~{nav/sidebar :: sidebar}"></div>
+
+				<div class="col-sm-9 padding-right">
+					<div class="features_items">
+						<!--features_items-->
+						<h2 class="title text-center">Features Items</h2>
+						<div class="col-sm-4" th:each="p : ${latestProducts}">
+							<div class="product-image-wrapper">
+								<div class="single-products">
+									<div class="productinfo text-center">
+										<a th:href="@{'/productDetails/'+${p.productId}}">
+											<img class="img-responsive" th:src="@{'/dashboardStatic/assets/img/' + ${p.productPictureName}}" th:alt="${p.productPictureName}" style="height:200px; width:280px;"/>
+										</a>
+										<h2>Rs. <span th:text="${p.price}"></span></h2>
+										<p th:text="${p.title}"></p>
+										<a th:href="@{'/addToCart/'+${p.productId}}" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>Add to cart</a>
+									</div>
+								</div>
+							</div>
+						</div>						
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<div th:replace="~{nav/footer :: footer}"></div>
+	
+	<script src="/js/jquery.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/jquery.scrollUp.min.js"></script>
+	<script src="/js/price-range.js"></script>
+	<script src="/js/jquery.prettyPhoto.js"></script>
+	<script src="/js/main.js"></script>
+</body>
+</html>

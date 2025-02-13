@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Shop</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/css/prettyPhoto.css" rel="stylesheet">
+    <link href="/css/price-range.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+	<link href="/css/main.css" rel="stylesheet">
+	<link href="/css/responsive.css" rel="stylesheet">      
+</head><!--/head-->
+
+<body>
+	<div th:replace="~{nav/navbar :: navbar}"></div>
+
+	<section id="advertisement">
+		<div class="container">
+		<div class="col-md-6 col-md-offset-3">
+			<div class="search_box text-center">
+				<input type="text" placeholder="Search" id="searchInput" oninput="filterProducts()"/>
+			</div>
+		</div>
+		</div>
+	</section>
+	
+	<section>
+		<div class="container">
+			<div class="row">
+				<div th:replace="~{nav/sidebar :: sidebar}"></div>
+				<div class="text-center mt-4">
+				  <h5>Select Price Range (NPR)</h5>
+				  <div class="d-flex align-items-center justify-content-center">
+				    <span id="minPrice">1000</span>
+				    <input type="range" id="priceSlider" min="1000" max="100000" step="500" value="100000"
+				           oninput="filterToursByPrice()" style="width: 60%;">
+				    <span id="maxPrice">100000</span>
+				  </div>
+				  <p class="mt-2">Selected Price: NPR <span id="selectedPrice">100000</span></p>
+				</div>
+				<div class="col-sm-9 padding-right">
+					<div class="features_items"><!--features_items-->
+						<h2 class="title text-center">Features Items</h2>
+						<div class="col-sm-3 product-item" th:each="p:${productList}">
+							<div class="product-image-wrapper">
+								<div class="single-products">
+									<div class="productinfo text-center">
+										<a th:href="@{'/productDetails/'+${p.productId}}">
+											<img class="img-responsive" th:src="@{'/dashboardStatic/assets/img/' + ${p.productPictureName}}" th:alt="${p.productPictureName}" style="height:200px; width:280px;"/>
+										</a>
+										<h2>Rs. <span th:text="${p.price}"></span></h2>
+										<p th:text="${p.title}"></p>
+										<a th:href="@{'/addToCart/'+${p.productId}}" class="btn btn-default add-to-cart" ><i class="fa fa-shopping-cart"></i>Add to cart</a>
+									</div>							
+								</div>
+							</div>
+						</div>
+
+						<nav class="col-md-6 col-md-offset-3">
+							<ul class="pagination">
+								<!-- Pagination buttons will be added here -->
+							</ul>
+						</nav>
+					</div><!--features_items-->
+				</div>
+			</div>
+		</div>
+	</section>
+	
+	<div th:replace="~{nav/footer :: footer}"></div>
+	
+    <script src="/js/jquery.js"></script>
+	<script src="/js/price-range.js"></script>
+    <script src="/js/jquery.scrollUp.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.prettyPhoto.js"></script>
+    <script src="/js/main.js"></script>
+    
+    <script>
+	function filterProducts() {
+	    var input = document.getElementById('searchInput');
+	    var filter = input.value.toLowerCase();
+	    var nodes = document.getElementsByClassName('product-item');
+	
+	    for (var i = 0; i < nodes.length; i++) {
+	        var title = nodes[i].textContent || nodes[i].innerText;
+	        if (title.toLowerCase().includes(filter)) {
+	            nodes[i].style.display = "block";
+	        } else {
+	            nodes[i].style.display = "none";
+	        }
+	    }
+	    updatePagination();  // Call to update the pagination after filtering
+	}
+	
+	function updatePagination() {
+	    var visibleItems = $('.product-item:visible').length;
+	    var totalPages = Math.ceil(visibleItems / 8);  // Assuming 9 items per page as initially set
+	
+	    $('.pagination').empty(); // Clear existing buttons
+	    for (var i = 1; i <= totalPages; i++) {
+	        $('.pagination').append('<li class="page-item"><a href="#" class="page-link">' + i + '</a></li>');
+	    }
+	    showPage(1); // Show the first page of new results
+	}
+	
+	$(document).ready(function() {
+	    var itemsPerPage = 8;
+	    var $products = $('.product-item');
+	    var totalItems = $products.length;
+	    var totalPages = Math.ceil(totalItems / itemsPerPage);
+	
+	    function showPage(page) {
+	        var startIndex = (page - 1) * itemsPerPage;
+	        var endIndex = startIndex + itemsPerPage;
+	        $products.hide().slice(startIndex, endIndex).show();
+	    }
+	
+	    // Initial page display
+	    showPage(1);
+	
+	    // Generate pagination buttons
+	    $('.pagination').empty(); // Ensure clear pagination on load
+	    for (var i = 1; i <= totalPages; i++) {
+	        $('.pagination').append('<li class="page-item"><a href="#" class="page-link">' + i + '</a></li>');
+	    }
+	
+	    // Pagination button click event
+	    $('.pagination').on('click', '.page-link', function(e) {
+	        e.preventDefault();
+	        var pageIndex = parseInt($(this).text());
+	        showPage(pageIndex);
+	
+	        $('.pagination .page-item').removeClass('active');
+	        $(this).parent().addClass('active');
+	    });
+	});
+	
+	</script>
+	
+	<script>
+	function filterToursByPrice() {
+	    const selectedPrice = document.getElementById("priceSlider").value;
+	    document.getElementById("selectedPrice").textContent = selectedPrice;
+	    
+	    const productItems = document.querySelectorAll(".product-item");
+	    
+	    productItems.forEach((productItem) => {
+	        // Find the price element inside the product item
+	        const priceElement = productItem.querySelector("h2 span");
+	        
+	        if (priceElement) {
+	            // Extract numeric value from the price text
+	            const price = parseFloat(priceElement.textContent.replace(/[^0-9.]/g, ''));
+	            
+	            // Show/hide based on price comparison
+	            if (price <= parseFloat(selectedPrice)) {
+	                productItem.style.display = "block";
+	            } else {
+	                productItem.style.display = "none";
+	            }
+	        }
+	    });
+	}
+
+	// Initialize price slider event listener
+	document.addEventListener('DOMContentLoaded', function() {
+	    const priceSlider = document.getElementById("priceSlider");
+	    
+	    if (priceSlider) {
+	        priceSlider.addEventListener("input", filterToursByPrice);
+	        
+	        // Set initial price display
+	        document.getElementById("selectedPrice").textContent = priceSlider.value;
+	    } else {
+	        console.error("Price slider not found!");
+	    }
+	});
+
+	</script>
+</body>
+</html>

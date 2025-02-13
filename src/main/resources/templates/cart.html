@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Cart</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/prettyPhoto.css" rel="stylesheet">
+    <link href="css/price-range.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+	<link href="css/main.css" rel="stylesheet">
+	<link href="css/responsive.css" rel="stylesheet"> 
+    <link rel="shortcut icon" href="images/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
+</head><!--/head-->
+
+<body>
+<div th:replace="~{nav/navbar :: navbar}"></div>
+
+	<section id="cart_items">
+		<div class="container">
+			<div class="breadcrumbs">
+				<ol class="breadcrumb">
+				  <li><a href="/">Home</a></li>
+				  <li class="active">Shopping Cart</li>
+				</ol>
+			</div>
+			<div class="table-responsive cart_info">
+				<table class="table table-condensed">
+					<thead>
+						<tr class="cart_menu">
+							<td class="description text-center">Title</td>
+							<td class="image text-center">Item</td>
+							<td class="price text-center">Price</td>
+							<td class="quantity text-center">Quantity</td>
+							<td class="total text-center">Total</td>
+							<td class="remove text-center">Remove</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="item, number: ${cart}">					
+							<td class="cart_description text-center">
+								<h4><a th:href="@{'/productDetails/'+${item.product.productId}}" th:text="${item.product.title}"></a></h4>
+							</td>
+							<td class="cart_product" style="margin-right: 10px;">
+								<img th:src="@{'/dashboardStatic/assets/img/' + ${item.product.productPictureName}}" th:alt="${item.product.productPictureName}" style="width: 80px; height: 80px;">
+							</td>
+							<td class="cart_price text-center">
+								<p>Rs. <span th:text="${item.product.price}"></span></p>
+							</td>
+							<td class="cart_quantity text-center">
+								<div class="cart_quantity_button">													
+									<button class="cart_quantity_up" th:onclick="'increaseQuantity(' + ${number.index} + ') '"> + </button>
+									<input class="cart_quantity_input" type="text" name="quantity" value="1" min="1" th:max="${item.product.stockAmount}" autocomplete="off" size="2">
+									<button class="cart_quantity_down" th:onclick="'decreaseQuantity(' + ${number.index} + ') '"> - </button>
+								</div>
+							</td>
+							<td class="cart_total text-center">
+								<p class="cart_total_price" id="total_price_${number.index}">
+									Rs. <span th:text="${item.product.price}"></span>
+								</p>
+							</td>
+							<td class="cart_delete text-center">
+								<a class="cart_quantity_delete" th:href="@{'/removeFromCart/' + ${number.index}}"><i class="fa fa-times"></i></a>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+            <tr>
+                <td colspan="3.5"></td>
+                <td colspan="2.5" class="text-right">
+                    Grand Total: <span id="grand_total">Rs. 0.00</span>
+                </td>
+            </tr>
+        </tfoot>
+				</table>
+				
+			</div>
+		</div>
+		<div class="row" style="margin-left:7%;margin-right:7%;">
+            <div class="col-xs-6">
+                <a href="shop" class="btn btn-default">Continue Browsing</a>
+            </div>
+            <div class="col-xs-6 text-right">
+                <a href="#" class="btn btn-primary" id="checkout_btn" onclick="redirectToCheckout()">Checkout</a>
+            </div>
+    </div>
+	</section> <!--/#cart_items-->
+
+	<div th:replace="~{nav/footer :: footer}"></div>
+
+<script>
+    // Update checkout amount on quantity change
+    function increaseQuantity(index) {
+        var quantityInput = document.querySelectorAll('input[name="quantity"]')[index];
+        var currentQuantity = parseInt(quantityInput.value);
+        var maxQuantity = parseInt(quantityInput.getAttribute('max'));
+        if (currentQuantity < maxQuantity) {
+            quantityInput.value = currentQuantity + 1;
+            updateTotalPrice(index);
+            calculateGrandTotal();
+        }
+    }
+
+    function decreaseQuantity(index) {
+        var quantityInput = document.querySelectorAll('input[name="quantity"]')[index];
+        var currentQuantity = parseInt(quantityInput.value);
+        if (currentQuantity > 1) {
+            quantityInput.value = currentQuantity - 1;
+            updateTotalPrice(index);
+            calculateGrandTotal();
+        }
+    }
+
+    function updateTotalPrice(index) {
+        var quantityInput = document.querySelectorAll('input[name="quantity"]')[index];
+        var totalPriceElement = document.querySelectorAll('.cart_total_price')[index];
+        var priceElement = document.querySelectorAll('.cart_price span')[index];
+        var quantity = parseInt(quantityInput.value);
+        var price = parseFloat(priceElement.textContent);
+        var total = quantity * price;
+        totalPriceElement.textContent = 'Rs. ' + total.toFixed(2);
+    }
+
+    function calculateGrandTotal() {
+        var total = 0;
+        var totalPriceElements = document.querySelectorAll('.cart_total_price');
+        for (var i = 0; i < totalPriceElements.length; i++) {
+            var totalPriceText = totalPriceElements[i].textContent.trim();
+            var totalPrice = parseFloat(totalPriceText.replace('Rs. ', ''));
+            total += totalPrice;
+        }
+        document.getElementById('grand_total').textContent = 'Rs. ' + total.toFixed(2);
+
+        // Update checkout button link with total amount
+        document.getElementById('checkout_btn').href = "/checkout?amount=" + total.toFixed(2);
+    }
+
+    function redirectToCheckout() {
+        var checkoutBtn = document.getElementById('checkout_btn');
+        window.location.href = checkoutBtn.href;
+    }
+
+    // Call initially
+    calculateGrandTotal();
+</script>
+
+
+	<script src="js/jquery.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.scrollUp.min.js"></script>
+    <script src="js/jquery.prettyPhoto.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Product</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin-top: 2vw;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        form {
+            width: 50%;
+            background-color: #fff;
+            margin-top: 200px;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="file"],
+        input[type="date"],
+        select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            width: 100%;
+            background-color: rgb(13, 110, 253);
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            opacity: 0.8;
+        }
+        textarea {
+            height: 100px; /* Set initial height */
+        }
+    </style>
+</head>
+<body>
+    <form action="/addProduct" method="post" enctype="multipart/form-data">
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" required />
+
+        <label for="sellerName">Seller Name</label>
+        <input type="text" id="sellerName" name="sellerName" required />
+
+        <label for="price">Price</label>
+        <input type="number" id="price" name="price" step="0.01" required />
+
+        <label for="productPicture">Product</label>
+        <input type="file" id="productPicture" name="productPicture" required />
+
+        <label for="category">Category</label>
+		<select id="category" name="category">
+		    <option value="indoor_plants">Indoor Plants</option>
+		    <option value="outdoor_plants">Outdoor Plants</option>
+		    <option value="succulents_cacti">Succulents & Cacti</option>
+		    <option value="flowering_plants">Flowering Plants</option>
+		    <option value="herbs">Herbs</option>
+		    <option value="bonsai">Bonsai</option>
+		    <option value="air_purifying_plants">Air Purifying Plants</option>
+		    <option value="exotic_plants">Exotic Plants</option>
+		</select>
+
+        <label for="description">Description</label>
+        <textarea id="description" name="description" required></textarea>
+
+        <label for="stockAmount">Product Quantity</label>
+        <input type="number" id="stockAmount" name="stockAmount" required />
+
+        <label for="availability">Availability</label>
+        <select id="availability" name="availability">
+            <option value="available">Available</option>
+            <option value="sold_out">Sold Out</option>
+        </select>
+
+        <label for="date">Date</label>
+        <input type="date" id="date" name="date" />
+
+        <input type="submit" value="Add Product" />
+    </form>
+
+    <script>
+        window.onload = function() {
+            var today = new Date();
+            var day = String(today.getDate()).padStart(2, '0');
+            var month = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var year = today.getFullYear();
+            today = year + '-' + month + '-' + day;
+            document.getElementById('date').value = today;
+        };
+    </script>
+</body>
+</html>

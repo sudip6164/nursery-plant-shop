@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Update Product</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin-top: 2vw;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        form {
+            width: 50%;
+            background-color: #fff;
+            margin-top:200px;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="file"],
+        input[type="date"],
+        select,textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            background-color: rgb(13, 110, 253);
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            opacity:0.8;
+        }
+           textarea { /* Additional style for textarea */
+            height: 100px; /* Set initial height */
+             width: 100%;
+             
+        }
+    </style>
+</head>
+<body>
+    <form action="/addProduct" method="post" enctype="multipart/form-data" th:object="${p}">
+    	<input type="hidden" th:field="*{productId}" />
+    
+        <label for="title">Title</label>
+        <input type="text" id="title" th:field="*{title}" />
+        
+        <label for="sellerName">Seller Name</label>
+        <input type="text" id="sellerName" th:field="*{sellerName}" />
+        
+        <label for="price">Price</label>
+        <input type="number" id="price" th:field="*{price}" step="0.01"/>
+         
+        <label for="productPicture">Artwork</label>
+        <input type="file" id="productPicture" th:field="*{productPicture}" />
+       
+        <label for="category">Category</label>
+        <select id="category" th:field="*{category}">
+	    <option value="sketches">Sketches</option>
+		<option value="illustrations">Illustrations</option>
+		<option value="portraits">Portraits</option>
+		<option value="still_life">Still Life</option>
+		<option value="figure_drawings">Figure Drawings</option>
+		<option value="landscape_drawings">Landscape Drawings</option>
+		<option value="botanical_illustrations">Botanical Illustrations</option>
+		<option value="abstract_art">Abstract Art</option>	    
+	</select>
+
+        
+        <label for="description">Description</label>
+        <textarea id="description" th:field="*{description}"></textarea>
+        
+        <label for="stockAmount">Product Quantity</label>
+        <input type="number" id="stockAmount" th:field="*{stockAmount}"/>
+        
+        <label for="availability">Availability</label>
+        <select id="availability" th:field="*{availability}">
+            <option value="available">Available</option>
+            <option value="sold_out">Sold Out</option>
+        </select>
+        
+        <label for="date">Date</label>
+        <input type="date" id="date" th:field="*{date}" readonly/>
+        
+        <input type="submit" value="Update Product" />
+    </form>
+</body>
+</html>

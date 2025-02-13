@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Product Table</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="dashboardStatic/css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    </head>
+    <body class="sb-nav-fixed">
+       <div th:replace="~{nav/navbarAdmin :: navbarAdmin}"></div>
+       
+        <div id="layoutSidenav">
+         <div th:replace="~{nav/sidebarAdmin :: sidebarAdmin}"></div>
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">Tables</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item">Dashboard</li>
+                            <li class="breadcrumb-item active">Product Tables</li>
+                        </ol>
+                        <div class="text-center mb-3">
+						    <a href="/addProductPage" class="btn btn-primary">Add Product</a>
+						</div>
+                        
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Products
+                            </div>
+                            <div class="card-body">
+                                <table id="datatablesSimple">
+                                   <thead>
+                                        <tr>                                 
+                                            <th>Product Id</th>
+                                            <th>Title</th>
+                                            <th>Seller</th>
+                                            <th>Price</th>                                                                    
+                                            <th>Artwork</th>                                            
+                                            <th>Category</th>                                            
+                                            <th>Product Quantity</th>                                            
+                                            <th>Availability</th>                                            
+                                            <th>Date</th>                                            
+                                            <th>Edit</th>                                            
+                                            <th>Delete</th>                                            
+                                        </tr>
+                                    </thead>                                  
+                                    <tbody>
+                                        <tr th:each="p:${productList}">
+                                            <td th:text="${p.productId}"></td>
+                                            <td th:text="${p.title}"></td>
+                                            <td th:text="${p.sellerName}"></td>
+                                            <td th:text="${p.price}"></td>
+                                            <td>
+											    <img th:if="${p.productPictureName != null}" th:src="@{'/dashboardStatic/assets/img/' + ${p.productPictureName}}" th:alt="${p.productPictureName}" style="width: 50px; height: 50px;">
+											</td>
+                                            <td th:text="${p.category}"></td>
+                                            <td th:text="${p.stockAmount}"></td>
+                                            <td th:text="${p.availability}"></td>
+                                            <td th:text="${p.date}"></td>
+                                           
+											<td>
+											    <a th:href="@{'/editProduct/'+${p.productId}}"><input type="button" value="Edit"></a>
+											</td>
+                                          
+                                            <td>
+												<a th:href="@{'/deleteProduct/'+${p.productId}}"><input type="submit" value="Delete"></a>
+											</td>                                     
+                                        </tr>
+                                     </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+                <div th:replace="~{nav/footerAdmin :: footerAdmin}"></div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="dashboardStatic/js/scripts.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+        <script src="dashboardStatic/js/datatables-simple-demo.js"></script>
+    </body>
+</html>
