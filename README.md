@@ -116,9 +116,9 @@ stripe.secretKey=your_stripe_secret_key
 5. Start XAMPP and enable MySQL and Apache
 
 6. Build and run the project:
-```bash
-mvn spring-boot:run
-```
+   - Right click on project
+   - Go to Run As
+   - Select run as Spring Boot App
 
 7. Access the application:
    - User Panel: http://localhost:8080
