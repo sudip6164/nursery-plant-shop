@@ -52,8 +52,8 @@ A Spring Boot-based e-commerce web application for selling nursery plants. This 
 - Maven 3.2.4
 - MySQL
 - XAMPP (for MySQL)
-- IDE (IntelliJ IDEA, Eclipse, Spring Tool Suite recommended)
-- Stripe API Key
+- IDE (IntelliJ IDEA, Eclipse, Spring Tool Suite (recommended))
+- Stripe Secret API Key
 
 ## 📂 Project Structure
 
